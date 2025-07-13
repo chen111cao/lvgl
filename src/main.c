@@ -143,7 +143,6 @@ int main(void)
 
 	lv_timer_handler();
 	display_blanking_off(display_dev);
-
 	while (1) {
 		if ((count % 100) == 0U) {
 			sprintf(count_str, "%d", count/100U);
@@ -151,6 +150,7 @@ int main(void)
 		}
 		lv_timer_handler();
 		++count;
+		LOG_INF("mian run %d",count);
 		k_sleep(K_MSEC(10));
 	}
 }
