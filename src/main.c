@@ -135,7 +135,7 @@ int main(void)
 		hello_world_label = lv_label_create(lv_screen_active());
 	}
 
-	lv_label_set_text(hello_world_label, "Hello world!");
+	lv_label_set_text(hello_world_label, "Hello!");
 	lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
 
 	count_label = lv_label_create(lv_screen_active());
