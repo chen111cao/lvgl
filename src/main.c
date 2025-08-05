@@ -14,6 +14,9 @@
 #include <zephyr/kernel.h>
 #include <lvgl_input_device.h>
 
+// #include "backdrop.c"
+// #include "foreground.c"
+
 #define LOG_LEVEL CONFIG_LOG_DEFAULT_LEVEL
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(app);
@@ -47,19 +50,32 @@ static const struct device *lvgl_keypad =
 	DEVICE_DT_GET(DT_COMPAT_GET_ANY_STATUS_OKAY(zephyr_lvgl_keypad_input));
 #endif /* CONFIG_LV_Z_KEYPAD_INPUT */
 
-static void lv_btn_click_callback(lv_event_t *e)
-{
-	ARG_UNUSED(e);
+// static void lv_btn_click_callback(lv_event_t *e)
+// {
+// 	ARG_UNUSED(e);
 
-	count = 0;
+// 	count = 0;
+// }
+
+void lv_image_test(void)
+{
+	// lv_obj_t * img1 = lv_image_create(lv_screen_active());
+	// LV_IMAGE_DECLARE(backdrop);
+    // lv_image_set_src(img1, &backdrop);
+    // lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
+
+	lv_obj_t * img1 = lv_image_create(lv_screen_active());
+	LV_IMAGE_DECLARE(foreground);
+    lv_image_set_src(img1, &foreground);
+    lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
 }
 
 int main(void)
 {
-	char count_str[11] = {0};
+	// char count_str[11] = {0};
 	const struct device *display_dev;
-	lv_obj_t *hello_world_label;
-	lv_obj_t *count_label;
+	// lv_obj_t *hello_world_label;
+	// lv_obj_t *count_label;
 
 	display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 	if (!device_is_ready(display_dev)) {
@@ -123,34 +139,36 @@ int main(void)
 	lv_indev_set_group(lvgl_input_get_indev(lvgl_keypad), btn_matrix_group);
 #endif /* CONFIG_LV_Z_KEYPAD_INPUT */
 
-	if (IS_ENABLED(CONFIG_LV_Z_POINTER_INPUT)) {
-		lv_obj_t *hello_world_button;
+	// if (IS_ENABLED(CONFIG_LV_Z_POINTER_INPUT)) {
+	// 	lv_obj_t *hello_world_button;
 
-		hello_world_button = lv_button_create(lv_screen_active());
-		lv_obj_align(hello_world_button, LV_ALIGN_CENTER, 0, -15);
-		lv_obj_add_event_cb(hello_world_button, lv_btn_click_callback, LV_EVENT_CLICKED,
-				    NULL);
-		hello_world_label = lv_label_create(hello_world_button);
-	} else {
-		hello_world_label = lv_label_create(lv_screen_active());
-	}
+	// 	hello_world_button = lv_button_create(lv_screen_active());
+	// 	lv_obj_align(hello_world_button, LV_ALIGN_CENTER, 0, -15);
+	// 	lv_obj_add_event_cb(hello_world_button, lv_btn_click_callback, LV_EVENT_CLICKED,
+	// 			    NULL);
+	// 	hello_world_label = lv_label_create(hello_world_button);
+	// } else {
+	// 	hello_world_label = lv_label_create(lv_screen_active());
+	// }
 
-	lv_label_set_text(hello_world_label, "Hello world!");
-	lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
+	// lv_label_set_text(hello_world_label, "Hello!");
+	// lv_obj_align(hello_world_label, LV_ALIGN_CENTER, 0, 0);
 
-	count_label = lv_label_create(lv_screen_active());
-	lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
+	// count_label = lv_label_create(lv_screen_active());
+	// lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+	lv_image_test();
 
 	lv_timer_handler();
 	display_blanking_off(display_dev);
 	while (1) {
-		if ((count % 100) == 0U) {
-			sprintf(count_str, "%d", count/100U);
-			lv_label_set_text(count_label, count_str);
-		}
+		// if ((count % 100) == 0U) {
+		// 	sprintf(count_str, "%d", count/100U);
+		// 	lv_label_set_text(count_label, count_str);
+		// }
 		lv_timer_handler();
-		++count;
-		LOG_INF("mian run %d",count);
+		// ++count;
+		// LOG_INF("mian run %d",count);
 		k_sleep(K_MSEC(10));
 	}
 }
