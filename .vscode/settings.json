@@ -1,3 +1,5 @@
 {
-    "idf.pythonInstallPath": "e:\\IDF-V4.4.8\\tools\\idf-python\\3.8.7\\python.exe"
+    "files.associations": {
+        "lvgl_input_device.h": "c"
+    }
 }

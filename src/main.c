@@ -14,9 +14,6 @@
 #include <zephyr/kernel.h>
 #include <lvgl_input_device.h>
 
-// #include "backdrop.c"
-// #include "foreground.c"
-
 #define LOG_LEVEL CONFIG_LOG_DEFAULT_LEVEL
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(app);
@@ -59,15 +56,15 @@ static const struct device *lvgl_keypad =
 
 void lv_image_test(void)
 {
-	// lv_obj_t * img1 = lv_image_create(lv_screen_active());
-	// LV_IMAGE_DECLARE(backdrop);
-    // lv_image_set_src(img1, &backdrop);
-    // lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
-
 	lv_obj_t * img1 = lv_image_create(lv_screen_active());
-	LV_IMAGE_DECLARE(foreground);
-    lv_image_set_src(img1, &foreground);
+	LV_IMAGE_DECLARE(backdrop);
+    lv_image_set_src(img1, &backdrop);
     lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
+
+	// lv_obj_t * img1 = lv_image_create(lv_screen_active());
+	// LV_IMAGE_DECLARE(foreground);
+    // lv_image_set_src(img1, &foreground);
+    // lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
 }
 
 int main(void)
