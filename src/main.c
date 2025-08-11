@@ -56,15 +56,15 @@ static const struct device *lvgl_keypad =
 
 void lv_image_test(void)
 {
-	lv_obj_t * img1 = lv_image_create(lv_screen_active());
-	LV_IMAGE_DECLARE(backdrop);
-    lv_image_set_src(img1, &backdrop);
-    lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
-
 	// lv_obj_t * img1 = lv_image_create(lv_screen_active());
-	// LV_IMAGE_DECLARE(foreground);
-    // lv_image_set_src(img1, &foreground);
+	// LV_IMAGE_DECLARE(backdrop);
+    // lv_image_set_src(img1, &backdrop);
     // lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
+
+	lv_obj_t * img1 = lv_image_create(lv_screen_active());
+	LV_IMAGE_DECLARE(foreground);
+    lv_image_set_src(img1, &foreground);
+    lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
 }
 
 int main(void)
@@ -80,61 +80,68 @@ int main(void)
 		return 0;
 	}
 
-#ifdef CONFIG_RESET_COUNTER_SW0
-	if (gpio_is_ready_dt(&button_gpio)) {
-		int err;
+	/* Set background color to white */
+	static lv_style_t style_screen;
+	lv_style_init(&style_screen);
+	// lv_style_set_bg_color(&style_screen, lv_color_white());
+	lv_style_set_bg_color(&style_screen, lv_color_black());
+	lv_obj_add_style(lv_scr_act(), &style_screen, 0);
 
-		err = gpio_pin_configure_dt(&button_gpio, GPIO_INPUT);
-		if (err) {
-			LOG_ERR("failed to configure button gpio: %d", err);
-			return 0;
-		}
+// #ifdef CONFIG_RESET_COUNTER_SW0
+// 	if (gpio_is_ready_dt(&button_gpio)) {
+// 		int err;
 
-		gpio_init_callback(&button_callback, button_isr_callback,
-				   BIT(button_gpio.pin));
+// 		err = gpio_pin_configure_dt(&button_gpio, GPIO_INPUT);
+// 		if (err) {
+// 			LOG_ERR("failed to configure button gpio: %d", err);
+// 			return 0;
+// 		}
 
-		err = gpio_add_callback(button_gpio.port, &button_callback);
-		if (err) {
-			LOG_ERR("failed to add button callback: %d", err);
-			return 0;
-		}
+// 		gpio_init_callback(&button_callback, button_isr_callback,
+// 				   BIT(button_gpio.pin));
 
-		err = gpio_pin_interrupt_configure_dt(&button_gpio,
-						      GPIO_INT_EDGE_TO_ACTIVE);
-		if (err) {
-			LOG_ERR("failed to enable button callback: %d", err);
-			return 0;
-		}
-	}
-#endif /* CONFIG_RESET_COUNTER_SW0 */
+// 		err = gpio_add_callback(button_gpio.port, &button_callback);
+// 		if (err) {
+// 			LOG_ERR("failed to add button callback: %d", err);
+// 			return 0;
+// 		}
 
-#ifdef CONFIG_LV_Z_ENCODER_INPUT
-	lv_obj_t *arc;
-	lv_group_t *arc_group;
+// 		err = gpio_pin_interrupt_configure_dt(&button_gpio,
+// 						      GPIO_INT_EDGE_TO_ACTIVE);
+// 		if (err) {
+// 			LOG_ERR("failed to enable button callback: %d", err);
+// 			return 0;
+// 		}
+// 	}
+// #endif /* CONFIG_RESET_COUNTER_SW0 */
 
-	arc = lv_arc_create(lv_screen_active());
-	lv_obj_align(arc, LV_ALIGN_CENTER, 0, -15);
-	lv_obj_set_size(arc, 150, 150);
+// #ifdef CONFIG_LV_Z_ENCODER_INPUT
+// 	lv_obj_t *arc;
+// 	lv_group_t *arc_group;
 
-	arc_group = lv_group_create();
-	lv_group_add_obj(arc_group, arc);
-	lv_indev_set_group(lvgl_input_get_indev(lvgl_encoder), arc_group);
-#endif /* CONFIG_LV_Z_ENCODER_INPUT */
+// 	arc = lv_arc_create(lv_screen_active());
+// 	lv_obj_align(arc, LV_ALIGN_CENTER, 0, -15);
+// 	lv_obj_set_size(arc, 150, 150);
 
-#ifdef CONFIG_LV_Z_KEYPAD_INPUT
-	lv_obj_t *btn_matrix;
-	lv_group_t *btn_matrix_group;
-	static const char *const btnm_map[] = {"1", "2", "3", "4", ""};
+// 	arc_group = lv_group_create();
+// 	lv_group_add_obj(arc_group, arc);
+// 	lv_indev_set_group(lvgl_input_get_indev(lvgl_encoder), arc_group);
+// #endif /* CONFIG_LV_Z_ENCODER_INPUT */
 
-	btn_matrix = lv_buttonmatrix_create(lv_screen_active());
-	lv_obj_align(btn_matrix, LV_ALIGN_CENTER, 0, 70);
-	lv_buttonmatrix_set_map(btn_matrix, (const char **)btnm_map);
-	lv_obj_set_size(btn_matrix, 100, 50);
+// #ifdef CONFIG_LV_Z_KEYPAD_INPUT
+// 	lv_obj_t *btn_matrix;
+// 	lv_group_t *btn_matrix_group;
+// 	static const char *const btnm_map[] = {"1", "2", "3", "4", ""};
 
-	btn_matrix_group = lv_group_create();
-	lv_group_add_obj(btn_matrix_group, btn_matrix);
-	lv_indev_set_group(lvgl_input_get_indev(lvgl_keypad), btn_matrix_group);
-#endif /* CONFIG_LV_Z_KEYPAD_INPUT */
+// 	btn_matrix = lv_buttonmatrix_create(lv_screen_active());
+// 	lv_obj_align(btn_matrix, LV_ALIGN_CENTER, 0, 70);
+// 	lv_buttonmatrix_set_map(btn_matrix, (const char **)btnm_map);
+// 	lv_obj_set_size(btn_matrix, 100, 50);
+
+// 	btn_matrix_group = lv_group_create();
+// 	lv_group_add_obj(btn_matrix_group, btn_matrix);
+// 	lv_indev_set_group(lvgl_input_get_indev(lvgl_keypad), btn_matrix_group);
+// #endif /* CONFIG_LV_Z_KEYPAD_INPUT */
 
 	// if (IS_ENABLED(CONFIG_LV_Z_POINTER_INPUT)) {
 	// 	lv_obj_t *hello_world_button;
@@ -154,7 +161,9 @@ int main(void)
 	// count_label = lv_label_create(lv_screen_active());
 	// lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
 
-	lv_image_test();
+
+	// lv_image_test();
+
 
 	lv_timer_handler();
 	display_blanking_off(display_dev);
