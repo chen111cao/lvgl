@@ -161,6 +161,11 @@ int main(void)
 	// count_label = lv_label_create(lv_screen_active());
 	// lv_obj_align(count_label, LV_ALIGN_BOTTOM_MID, 0, 0);
 
+	/* Set background color to white */
+	static lv_style_t style_screen;
+	lv_style_init(&style_screen);
+	lv_style_set_bg_color(&style_screen, lv_color_white());
+	lv_obj_add_style(lv_scr_act(), &style_screen, 0);
 
 	// lv_image_test();
 
